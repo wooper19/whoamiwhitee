@@ -142,15 +142,14 @@ function ResultsDisplay() {
       {/* 現有的重新開始按鈕 */}
       {buttonStyles.opacity === 1 && (
         <div style={buttonStyles}>
-          <Link href="/" passHref legacyBehavior>
-            <a style={{ display: 'block', width: '100%', height: '100%' }}>
+          {/* 修正後的 Link 用法：移除 passHref 和 legacyBehavior，將 style 移到 Link 本身 */}
+          <Link href="/" style={{ display: 'block', width: '100%', height: '100%' }}>
               <Image
-                src="/images/restartbutton.png" // 請確保您有此圖片
+                src="/images/restartbutton.png"
                 alt="重新開始"
                 layout="fill"
                 objectFit="contain"
               />
-            </a>
           </Link>
         </div>
       )}
