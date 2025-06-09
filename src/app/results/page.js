@@ -165,7 +165,7 @@ function ResultsDisplay() {
             style={{ display: 'block', width: '100%', height: '100%' }}
           >
             <Image
-              src="/images/homebutton.png" // <-- 將這裡替換成您實際的按鈕圖片路徑
+              src="/images/homebutton.png" // <-- **已修正為 homebutton.png**
               alt="前往外部網站"
               layout="fill"
               objectFit="contain"
