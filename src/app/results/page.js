@@ -133,10 +133,7 @@ function ResultsDisplay() {
           objectFit="contain"
           quality={100}
           priority
-          // 暫時移除 onLoadingComplete 屬性
-          // onLoadingComplete={({ naturalWidth, naturalHeight }) => {
-          //   setBgImageDimensions({ naturalWidth, naturalHeight });
-          // }}
+        
         />
       )}
 
