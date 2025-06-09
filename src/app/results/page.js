@@ -13,6 +13,12 @@ const BUTTON_OFFSET_Y_PERCENT_ON_IMAGE = 0.56;
 const BUTTON_WIDTH_PERCENT_OF_IMAGE = 0.2;
 const RESTART_BUTTON_ASPECT_RATIO = 300 / 100;
 
+// --- 新增的常數用於右下角外部連結按鈕 ---
+const EXTERNAL_LINK_BUTTON_OFFSET_X_PERCENT_ON_IMAGE = 0.50; // 調整 X 軸位置 (更靠右)
+const EXTERNAL_LINK_BUTTON_OFFSET_Y_PERCENT_ON_IMAGE = 0.90; // 調整 Y 軸位置 (更靠下)
+const EXTERNAL_LINK_BUTTON_WIDTH_PERCENT_OF_IMAGE = 0.2; // 調整按鈕寬度
+const EXTERNAL_LINK_BUTTON_ASPECT_RATIO = 1; // 假設是正方形按鈕，或者根據您的圖片調整
+
 function ResultsDisplay() {
   const searchParams = useSearchParams();
   const score = parseInt(searchParams.get('score') || '0', 10);
@@ -20,6 +26,7 @@ function ResultsDisplay() {
   const [resultEndImageSrc, setResultEndImageSrc] = useState('');
   const [bgImageDimensions, setBgImageDimensions] = useState({ naturalWidth: 0, naturalHeight: 0 });
   const [buttonStyles, setButtonStyles] = useState({ opacity: 0 });
+  const [externalLinkButtonStyles, setExternalLinkButtonStyles] = useState({ opacity: 0 }); // 新增狀態
 
   const containerRef = useRef(null);
 
@@ -37,6 +44,7 @@ function ResultsDisplay() {
   const calculateStyles = useCallback(() => {
     if (!containerRef.current || !bgImageDimensions.naturalWidth || !bgImageDimensions.naturalHeight) {
       setButtonStyles({ opacity: 0 });
+      setExternalLinkButtonStyles({ opacity: 0 }); // 初始化新按鈕樣式
       return;
     }
     const containerWidth = containerRef.current.offsetWidth;
@@ -57,6 +65,8 @@ function ResultsDisplay() {
       offsetX = (containerWidth - renderedImageWidth) / 2;
       offsetY = 0;
     }
+
+    // 計算現有重新開始按鈕的樣式
     const buttonActualWidth = renderedImageWidth * BUTTON_WIDTH_PERCENT_OF_IMAGE;
     const buttonActualHeight = buttonActualWidth / RESTART_BUTTON_ASPECT_RATIO;
     const buttonLeft = offsetX + (renderedImageWidth * BUTTON_OFFSET_X_PERCENT_ON_IMAGE);
@@ -71,6 +81,24 @@ function ResultsDisplay() {
       zIndex: 10,
       transition: 'opacity 0.3s ease-in-out',
     });
+
+    // --- 計算新增加的右下角外部連結按鈕的樣式 ---
+    const externalLinkButtonActualWidth = renderedImageWidth * EXTERNAL_LINK_BUTTON_WIDTH_PERCENT_OF_IMAGE;
+    const externalLinkButtonActualHeight = externalLinkButtonActualWidth / EXTERNAL_LINK_BUTTON_ASPECT_RATIO;
+    const externalLinkButtonLeft = offsetX + (renderedImageWidth * EXTERNAL_LINK_BUTTON_OFFSET_X_PERCENT_ON_IMAGE);
+    const externalLinkButtonTop = offsetY + (renderedImageHeight * EXTERNAL_LINK_BUTTON_OFFSET_Y_PERCENT_ON_IMAGE);
+    setExternalLinkButtonStyles({
+      position: 'absolute',
+      left: `${externalLinkButtonLeft}px`,
+      top: `${externalLinkButtonTop}px`,
+      width: `${externalLinkButtonActualWidth}px`,
+      height: `${externalLinkButtonActualHeight}px`,
+      opacity: 1,
+      zIndex: 10, // 確保在新按鈕之上
+      transition: 'opacity 0.3s ease-in-out',
+      transform: 'translate(-50%, -50%)', // 將按鈕中心點對齊設定的百分比位置
+    });
+
   }, [bgImageDimensions]);
 
   useEffect(() => {
@@ -111,18 +139,39 @@ function ResultsDisplay() {
         />
       )}
 
+      {/* 現有的重新開始按鈕 */}
       {buttonStyles.opacity === 1 && (
         <div style={buttonStyles}>
           <Link href="/" passHref legacyBehavior>
             <a style={{ display: 'block', width: '100%', height: '100%' }}>
               <Image
-                src="/images/restartbutton.png"
+                src="/images/restartbutton.png" // 請確保您有此圖片
                 alt="重新開始"
                 layout="fill"
                 objectFit="contain"
               />
             </a>
           </Link>
+        </div>
+      )}
+
+      {/* 新增的右下角外部連結按鈕 */}
+      {externalLinkButtonStyles.opacity === 1 && (
+        <div style={externalLinkButtonStyles}>
+          {/* 使用標準 <a> 標籤進行外部連結，並加上 target="_blank" 打開新分頁 */}
+          <a
+            href="https://classroomdaydream.vercel.app/" // <-- 將這裡替換成您想要連結的外部網址
+            target="_blank"
+            rel="noopener noreferrer" // 這是打開新視窗時的最佳實踐
+            style={{ display: 'block', width: '100%', height: '100%' }}
+          >
+            <Image
+              src="/images/homebutton.png" // <-- 將這裡替換成您實際的按鈕圖片路徑
+              alt="前往外部網站"
+              layout="fill"
+              objectFit="contain"
+            />
+          </a>
         </div>
       )}
     </main>
