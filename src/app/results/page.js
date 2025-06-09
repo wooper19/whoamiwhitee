@@ -125,7 +125,7 @@ function ResultsDisplay() {
   return (
     // --- 您的 JSX 結構完全不變 ---
     <main style={mainStyle} ref={containerRef}>
-      {resultEndImageSrc && (
+     {resultEndImageSrc && (
         <Image
           src={resultEndImageSrc}
           alt="遊戲結果背景"
@@ -133,9 +133,10 @@ function ResultsDisplay() {
           objectFit="contain"
           quality={100}
           priority
-          onLoadingComplete={({ naturalWidth, naturalHeight }) => {
-            setBgImageDimensions({ naturalWidth, naturalHeight });
-          }}
+          // 暫時移除 onLoadingComplete 屬性
+          // onLoadingComplete={({ naturalWidth, naturalHeight }) => {
+          //   setBgImageDimensions({ naturalWidth, naturalHeight });
+          // }}
         />
       )}
 
